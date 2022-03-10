@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace TicTacToe.Interfaces
 {
     public enum GameState { None, OnGoing, Finneshed }
-    enum GameType { PvP, PvAI, AIvAI }
+    public enum GameType { PvP, PvAI, AIvAI }
     interface IGame
     {
         public GameState GameState { get; set; }
@@ -29,6 +29,7 @@ namespace TicTacToe.Interfaces
         public abstract void AddPlayer(IPlayer player);
 
         public abstract IPlayer NextPlayer();
+        public abstract void EndGame();
 
     }
 }

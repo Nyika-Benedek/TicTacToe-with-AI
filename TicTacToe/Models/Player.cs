@@ -11,9 +11,12 @@ namespace TicTacToe.Models
     {
         public string name { get; private set; }
 
-        public Player(String name)
+        public Char symbol { get; private set; }
+
+        public Player(String name, Char symbol)
         {
             this.name = name;
+            this.symbol = symbol;
         }
     }
 }

@@ -58,6 +58,10 @@ namespace TicTacToe
             DrawNewField();
         }
 
+        private int AiIteration = 0;
+
+        private IGame game;
+
         private const int CelldSize = 100;
         public enum LineType { GridLine, XLine }
 
@@ -71,7 +75,7 @@ namespace TicTacToe
             {
                 myLine.Stroke = System.Windows.Media.Brushes.White;
             }
-            
+
             myLine.X1 = x1;
             myLine.X2 = x2;
             myLine.Y1 = y1;
@@ -90,7 +94,7 @@ namespace TicTacToe
             x = x * 100;
             y = y * 100;
             DrawLine(x, x + CelldSize, y, y + CelldSize, LineType.XLine);
-            DrawLine(x, x+CelldSize, y + CelldSize, y, LineType.XLine);
+            DrawLine(x, x + CelldSize, y + CelldSize, y, LineType.XLine);
         }
 
         private void DrawCirle(Coordinate coordinate)
@@ -130,12 +134,88 @@ namespace TicTacToe
             return new Coordinate(x, y);
         }
 
+        private void DrawPlayerClick(IPlayer player) {
+            if (player.symbol == 'X')
+            {
+                DrawX(GetMousePosition());
+            }
+            else
+            {
+                DrawCirle(GetMousePosition());
+            }
+        }
+
+        private void PlayerMove() {
+            DrawPlayerClick(game.CurrentPlayer);
+            game.Field.AddMove(GetMousePosition(), game.CurrentPlayer.symbol);
+        }
+
+        public void PostWinCondition() {
+            game.EndGame();
+            if (game.Field.FieldState == FieldState.NoSpaceLeft)
+            {
+                MessageBox.Show("Unfortunately, this is a tie.");
+            }
+            else
+            {
+                MessageBox.Show($"Congratulation {game.Winner.name}, you win!");
+            }
+            // TODO: DATABSE UPDATE
+        }
+
         private void CanvasClick(object sender, MouseButtonEventArgs e)
         {
-            
-            DrawX(GetMousePosition());
-            DrawCirle(GetMousePosition());
-            
+            if (game is null || game.GameState == GameState.None || game.GameState == GameState.Finneshed)
+            {
+                return;
+            }
+
+            if (game.GameType == GameType.PvP)
+            {
+                PlayerMove();
+                if (game.isEnded())
+                {
+                    PostWinCondition();
+                }
+                game.NextPlayer();
+            }
+
+            if (game.GameType == GameType.PvAI)
+            {
+                PlayerMove();
+                if (game.isEnded())
+                {
+                    PostWinCondition();
+                }
+                else
+                {
+                    game.NextPlayer();
+                    // TODO: AI act
+                    if (game.isEnded())
+                    {
+                        PostWinCondition();
+                    }
+                }
+            }
+
+            LetAiPlay();
+        }
+
+        private void LetAiPlay()
+        {
+            for (int i = 0; i < AiIteration; i++)
+            {
+                while (!game.isEnded())
+                {
+                    // TODO: AI-1 act
+                    if (game.isEnded())
+                    {
+                        break;
+                    }
+                    // TODO: AI-2 act
+                }
+                PostWinCondition();
+            }
         }
 
         private void NewGame(object sender, RoutedEventArgs e)
@@ -144,9 +224,18 @@ namespace TicTacToe
             newGameWindow.ShowDialog();
             DrawNewField();
 
-            IGame game = new Game();
-            game.AddPlayer(new Player(newGameWindow.Player1Name));
-            game.AddPlayer(new Player(newGameWindow.Player2Name));
+            game = new Game();
+            game.AddPlayer(new Player(newGameWindow.Player1Name, 'X'));
+            game.AddPlayer(new Player(newGameWindow.Player2Name, 'O'));
+            game.GameType = newGameWindow.gameType;
+            AiIteration = newGameWindow.XGames;
+
+            game.Start();
+
+            if (game.GameType == GameType.AIvAI)
+            {
+                MessageBox.Show("We are ready! \rPlease click on the playing field to start.");
+            }
         }
 
         private void Query(object sender, RoutedEventArgs e)

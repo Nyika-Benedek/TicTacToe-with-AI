@@ -9,7 +9,7 @@ namespace TicTacToe.Models
 {
     class Game : IGame
     {
-        public List<IPlayer> Players { get; private set; }
+        public List<IPlayer> Players { get; private set; } = new List<IPlayer>(2);
 
         public IPlayer CurrentPlayer { get; private set; }
 
@@ -20,6 +20,7 @@ namespace TicTacToe.Models
         public int Turn { get; private set; } = 0;
         public GameState GameState { get; set; } = GameState.None;
         public GameType GameType { get; set; }
+        public FieldState FieldState { get; set; } = FieldState.ThereIsEmptySpace;
 
         private int playerIndex = -1;
 
@@ -34,15 +35,20 @@ namespace TicTacToe.Models
 
         public bool isEnded()
         {
-            Char matchedChar = Field.Match();
-            if (matchedChar == ' ')
-            {
-                return false;
-            }
-            else
+            Field.UpdateFieldState();
+            if (Field.FieldState == FieldState.ThereIsAMatch || Field.FieldState == FieldState.NoSpaceLeft)
             {
                 return true;
             }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void EndGame() {
+            this.GameState = GameState.Finneshed;
+            Winner = this.CurrentPlayer;
         }
 
         public IPlayer NextPlayer()
@@ -54,8 +60,16 @@ namespace TicTacToe.Models
         public void Start()
         {
             GameState = GameState.OnGoing;
-
+            this.NextPlayer();
             Field = new Field();
+        }
+
+        public void Restart()
+        {
+            GameState = GameState.OnGoing;
+            this.CurrentPlayer = Players[0];
+            Field = new Field();
+            Winner = null;
         }
     }
 }

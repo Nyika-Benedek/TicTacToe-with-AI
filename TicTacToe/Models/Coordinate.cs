@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.Model
 {
-    class Coordinate
+    public class Coordinate
     {
 
         public int X { get; set; }

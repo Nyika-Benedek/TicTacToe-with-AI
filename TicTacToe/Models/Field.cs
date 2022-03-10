@@ -4,14 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TicTacToe.Interfaces;
+using TicTacToe.Model;
 
 namespace TicTacToe.Models
 {
     public class Field : IField
     {
-        public Char[,] FieldMap { get; private set; }
+        public FieldState FieldState { get; private set; } = FieldState.ThereIsEmptySpace;
+        public Char[,] FieldMap { get; private set; } = new Char[3,3];
 
-
+        public void AddMove(Coordinate coordinate, Char symbol) {
+            this.FieldMap[coordinate.X, coordinate.Y] = symbol;
+        }
         public Field()
         {
             Char[,] FieldMap = new char[3, 3] { { ' ', ' ', ' ' }, { ' ', ' ', ' ' }, { ' ', ' ', ' ' }};
@@ -40,37 +44,59 @@ namespace TicTacToe.Models
             }
         }
 
-        /// <summary>
-        /// if there are 3 symboles matched horisontally/vertically/diagonally, than returns the matched symbol.
-        /// </summary>
-        /// <returns>if there any, then return the matched symbol, ' ' otherwise.</returns>
-        public Char Match() {
+        public bool isEmptySpaceLeft() {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (FieldMap[i, j] == '\0')
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+
+        public void UpdateFieldState() {
             for (int i = 0; i < 3; i++)
             {
                 // check rows
-                if (FieldMap[i, 0] == FieldMap[i, 1] && FieldMap[i, 1] == FieldMap[i, 2])
+                if (FieldMap[i, 0] == FieldMap[i, 1] && FieldMap[i, 1] == FieldMap[i, 2] && FieldMap[i, 1] != '\0')
                 {
-                    return FieldMap[i, 0];
+                    this.FieldState = FieldState.ThereIsAMatch;
+                    return;
                 }
 
                 // check collumns
-                if (FieldMap[0, i] == FieldMap[1, i] && FieldMap[1, i] == FieldMap[2, i])
+                if (FieldMap[0, i] == FieldMap[1, i] && FieldMap[1, i] == FieldMap[2, i] && FieldMap[1, i] != '\0')
                 {
-                    return FieldMap[0, i];
+                    this.FieldState = FieldState.ThereIsAMatch;
+                    return;
                 }
             }
 
             // check diagonals
-            if (FieldMap[0, 0] == FieldMap[1, 1] && FieldMap[1, 1] == FieldMap[2, 2])
+            if (FieldMap[0, 0] == FieldMap[1, 1] && FieldMap[1, 1] == FieldMap[2, 2] && FieldMap[1, 1] != '\0')
             {
-                return FieldMap[0, 0];
+                this.FieldState = FieldState.ThereIsAMatch;
+                return;
             }
 
-            if (FieldMap[2, 0] == FieldMap[1, 1] && FieldMap[1, 1] == FieldMap[2, 0])
+            if (FieldMap[2, 0] == FieldMap[1, 1] && FieldMap[1, 1] == FieldMap[0, 2] && FieldMap[1, 1] != '\0')
             {
-                return FieldMap[2, 0];
+                this.FieldState = FieldState.ThereIsAMatch;
+                return;
             }
-            return ' ';
+
+            if (isEmptySpaceLeft())
+            {
+                this.FieldState = FieldState.ThereIsEmptySpace;
+                return;
+            }
+
+            this.FieldState = FieldState.NoSpaceLeft;
         }
     }
 

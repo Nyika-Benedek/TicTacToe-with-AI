@@ -10,5 +10,7 @@ namespace TicTacToe.Interfaces
     {
         public String name { get; }
 
+        public char symbol { get; }
+
     }
 }

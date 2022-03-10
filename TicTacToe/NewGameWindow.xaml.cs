@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TicTacToe.Interfaces;
 
 namespace TicTacToe
 {
@@ -28,6 +29,7 @@ namespace TicTacToe
         public string Player1Name { get; private set; }
         public string Player2Name { get; private set; }
         public int XGames { get; private set; }
+        public GameType gameType { get; private set; }
 
         private void GiveNames(object sender, RoutedEventArgs e)
         {
@@ -59,6 +61,19 @@ namespace TicTacToe
 
             Player1Name = Player1.Text;
             Player2Name = Player2.Text;
+            if (PvsPButton.IsChecked == true)
+            {
+                gameType = GameType.PvP;
+            }
+            else if (PvsAIButton.IsChecked == true)
+            {
+                gameType = GameType.PvAI;
+            }
+            else
+            {
+                gameType = GameType.AIvAI;
+            }
+
             if (intRegex.IsMatch(AutoRunXGames.Text))
             {
                 XGames = int.Parse(AutoRunXGames.Text);
