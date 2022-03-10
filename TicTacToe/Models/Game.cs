@@ -17,8 +17,9 @@ namespace TicTacToe.Models
 
         public IPlayer Winner { get; set; }
 
-        public int Turn { get; }
+        public int Turn { get; private set; } = 0;
         public GameState GameState { get; set; } = GameState.None;
+        public GameType GameType { get; set; }
 
         private int playerIndex = -1;
 

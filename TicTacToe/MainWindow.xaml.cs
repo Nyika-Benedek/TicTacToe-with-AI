@@ -13,7 +13,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TicTacToe.Entity;
+using TicTacToe.Interfaces;
 using TicTacToe.Model;
+using TicTacToe.Models;
 
 namespace TicTacToe
 {
@@ -138,7 +140,13 @@ namespace TicTacToe
 
         private void NewGame(object sender, RoutedEventArgs e)
         {
+            var newGameWindow = new NewGameWindow();
+            newGameWindow.ShowDialog();
             DrawNewField();
+
+            IGame game = new Game();
+            game.AddPlayer(new Player(newGameWindow.Player1Name));
+            game.AddPlayer(new Player(newGameWindow.Player2Name));
         }
 
         private void Query(object sender, RoutedEventArgs e)
