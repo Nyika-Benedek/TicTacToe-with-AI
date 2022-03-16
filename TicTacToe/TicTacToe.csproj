@@ -21,6 +21,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="AiOptionsWindow - Copy - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>AiOptionsWindow - Copy.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="AiOptionsWindow - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>AiOptionsWindow.xaml.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

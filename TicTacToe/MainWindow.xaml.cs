@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TicTacToe.AI;
 using TicTacToe.Entity;
 using TicTacToe.Interfaces;
 using TicTacToe.Model;
@@ -58,12 +59,17 @@ namespace TicTacToe
             DrawNewField();
         }
 
+        /// <summary>
+        /// How many AI vs AI games should compute at once
+        /// </summary>
         private int AiIteration = 0;
 
         private IGame game;
 
         private const int CelldSize = 100;
         public enum LineType { GridLine, XLine }
+        private Ai ai1;
+        private Ai ai2;
 
         private void DrawLine(int x1, int x2, int y1, int y2, LineType color) {
             var myLine = new Line();
@@ -145,9 +151,26 @@ namespace TicTacToe
             }
         }
 
+        private void DrawAiMove(Coordinate coordinate, Char symbol) {
+            if (symbol == 'X')
+            {
+                DrawX(coordinate);
+            }
+            else
+            {
+                DrawCirle(coordinate);
+            }
+        }
+
         private void PlayerMove() {
             DrawPlayerClick(game.CurrentPlayer);
             game.Field.AddMove(GetMousePosition(), game.CurrentPlayer.symbol);
+        }
+
+        private void AiMove(Ai ai) {
+            Coordinate move = ai.GetMoveByLogicType((Game)game);
+            game.Field.AddMove(move, ai.symbol);
+            DrawAiMove(move, ai.symbol);
         }
 
         public void PostWinCondition() {
@@ -178,6 +201,7 @@ namespace TicTacToe
                     PostWinCondition();
                 }
                 game.NextPlayer();
+                return;
             }
 
             if (game.GameType == GameType.PvAI)
@@ -190,15 +214,19 @@ namespace TicTacToe
                 else
                 {
                     game.NextPlayer();
-                    // TODO: AI act
+                    AiMove(ai2);
                     if (game.isEnded())
                     {
                         PostWinCondition();
                     }
+                    game.NextPlayer();
                 }
+                return;
             }
-
-            LetAiPlay();
+            // TODO: if GameType.AIvAI
+            if (game.GameType == GameType.AIvAI) {
+                LetAiPlay();
+            }
         }
 
         private void LetAiPlay()
@@ -224,9 +252,42 @@ namespace TicTacToe
             newGameWindow.ShowDialog();
             DrawNewField();
 
+
             game = new Game();
-            game.AddPlayer(new Player(newGameWindow.Player1Name, 'X'));
-            game.AddPlayer(new Player(newGameWindow.Player2Name, 'O'));
+            game.GameType = newGameWindow.gameType;
+            if (game.GameType == GameType.PvP)
+            {
+                game.AddPlayer(new Player(newGameWindow.Player1Name, 'X'));
+                game.AddPlayer(new Player(newGameWindow.Player2Name, 'O'));
+            }
+
+            if (game.GameType == GameType.PvAI)
+            {
+                game.AddPlayer(new Player(newGameWindow.Player1Name, 'X'));
+
+                var aiOptionsWindow = new AiOptionsWindow();
+                aiOptionsWindow.ShowDialog();
+
+                if (aiOptionsWindow.aiLogicType == AiLogicType.Random)
+                {
+                    ai2 = new Ai("Player2(AI)", 'O', AiLogicType.Random, game);
+                    game.AddPlayer(ai2);
+                }
+
+                if (aiOptionsWindow.aiLogicType == AiLogicType.MinMax)
+                {
+                    ai2 = new Ai("Player2(AI)", 'O', AiLogicType.MinMax, game);
+                    game.AddPlayer(ai2);
+                }
+
+                
+            }
+
+            if (game.GameType == GameType.AIvAI)
+            {
+                // TODO: AI vs AI game creation
+            }
+
             game.GameType = newGameWindow.gameType;
             AiIteration = newGameWindow.XGames;
 

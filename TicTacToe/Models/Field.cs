@@ -44,7 +44,7 @@ namespace TicTacToe.Models
             }
         }
 
-        public bool isEmptySpaceLeft() {
+        public bool IsEmptySpaceLeft() {
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -90,13 +90,17 @@ namespace TicTacToe.Models
                 return;
             }
 
-            if (isEmptySpaceLeft())
+            if (IsEmptySpaceLeft())
             {
                 this.FieldState = FieldState.ThereIsEmptySpace;
                 return;
             }
 
             this.FieldState = FieldState.NoSpaceLeft;
+        }
+
+        public bool IsCellEmpty(Coordinate coordinate) {
+            return this.FieldMap[coordinate.X, coordinate.Y] == '\0';
         }
     }
 

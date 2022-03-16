@@ -14,6 +14,7 @@ namespace TicTacToe.Interfaces
         public Char[,] FieldMap { get; }
         public abstract void AddMove(Coordinate coordinate, char symbol);
         public abstract void UpdateFieldState();
-        public abstract bool isEmptySpaceLeft();
+        public abstract bool IsEmptySpaceLeft();
+        public abstract bool IsCellEmpty(Coordinate coordinate);
     }
 }
