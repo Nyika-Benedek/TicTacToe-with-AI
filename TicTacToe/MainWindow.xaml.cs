@@ -293,7 +293,32 @@ namespace TicTacToe
 
             if (game.GameType == GameType.AIvAI)
             {
-                // TODO: AI vs AI game creation
+                var aiVsAiOptionsWindow = new AiVsAiOptionsWindow();
+                aiVsAiOptionsWindow.ShowDialog();
+
+                if (aiVsAiOptionsWindow.ai1LogicType == AiLogicType.Random)
+                {
+                    ai2 = new Ai("Player1(AI)", 'X', AiLogicType.Random, game);
+                    game.AddPlayer(ai2);
+                }
+
+                if (aiVsAiOptionsWindow.ai1LogicType == AiLogicType.MinMax)
+                {
+                    ai2 = new Ai("Player1(AI)", 'X', AiLogicType.MinMax, game);
+                    game.AddPlayer(ai2);
+                }
+
+                if (aiVsAiOptionsWindow.ai2LogicType == AiLogicType.Random)
+                {
+                    ai2 = new Ai("Player2(AI)", 'O', AiLogicType.Random, game);
+                    game.AddPlayer(ai2);
+                }
+
+                if (aiVsAiOptionsWindow.ai2LogicType == AiLogicType.MinMax)
+                {
+                    ai2 = new Ai("Player2(AI)", 'O', AiLogicType.MinMax, game);
+                    game.AddPlayer(ai2);
+                }
             }
 
             game.GameType = newGameWindow.gameType;
