@@ -12,15 +12,14 @@ namespace TicTacToe.AI
     public enum AiLogicType { Random, MinMax };
     class Ai : Player
     {
-        public Game gameToSimulate { get; private set; }
+        private static int MAX_DEPTH = 20;
         public int helpedPlayer { get; private set; }
         public AiLogicType LogicType { get; private set; }
 
 
         public Ai(string name, char symbol, AiLogicType logicType, IGame game) :base(name, symbol) {
             this.LogicType = logicType;
-            this.helpedPlayer = game.Players.Count-1;
-            this.gameToSimulate = (Game)game;
+            this.helpedPlayer = game.Players.Count;
         }
 
         public Coordinate GetMoveByLogicType(Game game) {
@@ -38,7 +37,7 @@ namespace TicTacToe.AI
 
             if (this.LogicType == AiLogicType.MinMax)
             {
-                return MinMax(game).Item1;
+                return MiniMax(game).Item1;
             }
             else
             {
@@ -46,58 +45,90 @@ namespace TicTacToe.AI
             }
         }
 
-        public (Coordinate, int) MinMax(Game game, int score = 0)
+        public (Coordinate, int) MiniMax(Game game, Coordinate move = null, int score = 0, bool isMaximising = true, int depth = 0)
         {
-            Coordinate bestMove = new Coordinate(-1, -1);
-
-            game.Field.UpdateFieldState();
-            if (game.Field.FieldState == Interfaces.FieldState.ThereIsAMatch)
+            if (depth == MAX_DEPTH)
             {
-                game.NextPlayer();
-                game.EndGame();
+                return (move, 0);
+            }
+
+            Game gameCopy = (Game)game.Clone();
+            if (move is not null)
+            {
+                gameCopy.Field.AddMove(move, gameCopy.CurrentPlayer.symbol);
+                gameCopy.NextPlayer();
+            }
+
+            gameCopy.Field.UpdateFieldState();
+            if (gameCopy.Field.FieldState == Interfaces.FieldState.ThereIsAMatch)
+            {
+                gameCopy.EndGame();
                 // If it wins
-                if (game.Winner == game.Players[helpedPlayer])
+                if (gameCopy.Winner == gameCopy.Players[helpedPlayer])
                 {
-                    return (bestMove, 100);
+                    return (move, 100);
                 }
                 else
                 {
-                    return (bestMove, -100);
-                }                
+                    return (move, -100);
+                }
             }
 
-            if (game.Field.FieldState == Interfaces.FieldState.NoSpaceLeft)
-            {
-                // If tie
-                return (bestMove, 0);
-            }
-
-            int bestScore = int.MinValue;
-            // createing possible fields
+            Coordinate coordinate = null;
+            List<(Coordinate, int)> childs = new List<(Coordinate, int)>();
+            bool thereIsSpaceLeft = false;
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    Coordinate coordinate = new Coordinate(i, j);
-                    if (game.Field.IsCellEmpty(coordinate))
-                    {
-                        game.Field.AddMove(coordinate, game.CurrentPlayer.symbol);
-                        game.NextPlayer();
+                    coordinate = new Coordinate(i, j);
 
-                        (Coordinate, int) child = MinMax(game, --score);
-                        if (bestScore < child.Item2)
-                        {
-                            bestMove = child.Item1;
-                            bestScore = child.Item2;
-                        }
+                    if (gameCopy.Field.IsCellEmpty(coordinate))
+                    {
+                        thereIsSpaceLeft = true;
+                        (Coordinate, int) child = MiniMax(game: gameCopy, move: coordinate, score: score-1, isMaximising: !isMaximising, depth: depth + 1);
+                        child.Item2 += score;
+                        childs.Add(child);
+                        
                     }
                 }
             }
-            return (bestMove, bestScore);
+
+            if (!thereIsSpaceLeft)
+            {
+                return (move, 0);
+            }
+
+            if (isMaximising)
+            {
+                (Coordinate, int) max = AIUtils.GetMaxOfChilds(childs);
+                if (move is null)
+                {
+                    return max;
+                }
+                else
+                {
+                    return (move, max.Item2);
+                }
+            }
+            else
+            {
+                (Coordinate, int) min = AIUtils.GetMinOfChilds(childs);
+                if (move is null)
+                {
+                    return min;
+                }
+                else
+                {
+                    return (move, min.Item2);
+                }
+            }
         }
 
-        public void Act(Game game) {
-            game.Field.AddMove(GetMoveByLogicType(game), this.symbol);
+        public Coordinate Act(Game game) {
+            Coordinate move = GetMoveByLogicType(game);
+            game.Field.AddMove(move, this.symbol);
+            return move;
         }
     }
 }

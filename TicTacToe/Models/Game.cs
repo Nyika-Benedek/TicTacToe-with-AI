@@ -20,7 +20,6 @@ namespace TicTacToe.Models
         public int Turn { get; private set; } = 0;
         public GameState GameState { get; set; } = GameState.None;
         public GameType GameType { get; set; }
-        public FieldState FieldState { get; set; } = FieldState.ThereIsEmptySpace;
 
         private int playerIndex = -1;
 
@@ -47,6 +46,10 @@ namespace TicTacToe.Models
         }
 
         public void EndGame() {
+            // set back turn and player to the correct value
+            this.NextPlayer();
+            Turn -= 2;
+
             this.GameState = GameState.Finneshed;
             Winner = this.CurrentPlayer;
         }
@@ -54,6 +57,7 @@ namespace TicTacToe.Models
         public IPlayer NextPlayer()
         {
             playerIndex++;
+            this.Turn++;
             return CurrentPlayer = Players[playerIndex % 2];
         }
 
@@ -70,6 +74,26 @@ namespace TicTacToe.Models
             this.CurrentPlayer = Players[0];
             Field = new Field();
             Winner = null;
+        }
+
+        public object Clone()
+        {
+            Game clone = new Game();
+
+            foreach (var player in this.Players)
+            {
+                clone.AddPlayer(player);
+            }
+
+            clone.CurrentPlayer = this.CurrentPlayer;
+            clone.Field = (Field)this.Field.Clone();
+            clone.Winner = this.Winner;
+            clone.Turn = this.Turn;
+            clone.GameState = this.GameState;
+            clone.GameType = this.GameType;
+            clone.playerIndex = this.playerIndex;
+
+            return clone;
         }
     }
 }

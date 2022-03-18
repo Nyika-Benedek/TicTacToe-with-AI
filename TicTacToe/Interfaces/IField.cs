@@ -8,11 +8,11 @@ using TicTacToe.Model;
 namespace TicTacToe.Interfaces
 {
     public enum FieldState { ThereIsEmptySpace, NoSpaceLeft, ThereIsAMatch }
-    interface IField
+    interface IField : ICloneable
     {
         public FieldState FieldState { get; }
         public Char[,] FieldMap { get; }
-        public abstract void AddMove(Coordinate coordinate, char symbol);
+        public abstract bool AddMove(Coordinate coordinate, char symbol);
         public abstract void UpdateFieldState();
         public abstract bool IsEmptySpaceLeft();
         public abstract bool IsCellEmpty(Coordinate coordinate);

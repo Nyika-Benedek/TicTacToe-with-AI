@@ -13,8 +13,16 @@ namespace TicTacToe.Models
         public FieldState FieldState { get; private set; } = FieldState.ThereIsEmptySpace;
         public Char[,] FieldMap { get; private set; } = new Char[3,3];
 
-        public void AddMove(Coordinate coordinate, Char symbol) {
-            this.FieldMap[coordinate.X, coordinate.Y] = symbol;
+        public bool AddMove(Coordinate coordinate, Char symbol) {
+            if (this.IsCellEmpty(coordinate))
+            {
+                this.FieldMap[coordinate.X, coordinate.Y] = symbol;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         public Field()
         {
@@ -101,6 +109,43 @@ namespace TicTacToe.Models
 
         public bool IsCellEmpty(Coordinate coordinate) {
             return this.FieldMap[coordinate.X, coordinate.Y] == '\0';
+        }
+
+        public object Clone()
+        {
+            Field clone = new Field();
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    clone.FieldMap[i, j] = this.FieldMap[i, j];
+                }
+            }
+
+            clone.FieldState = this.FieldState;
+
+            return clone;
+        }
+
+        public override string ToString()
+        {
+            string output = "";
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (this.FieldMap[i, j] == '\0')
+                    {
+                        output += '-';
+                    }
+                    else
+                    {
+                        output += this.FieldMap[i, j];
+                    }
+                }
+                output += '\n';
+            }
+            return output;
         }
     }
 

@@ -50,5 +50,16 @@ namespace TicTacToe.Model
             return "X" + this.X + "Y" + this.Y;
         }
 
+        /// <summary>
+        /// If the coordinate's each value is [0, 2]
+        /// </summary>
+        /// <returns>True, if its within the interval, false otherwise.</returns>
+        public bool IsValid() {
+            bool inclusive = false;
+            return inclusive
+                    ?   0 <= this.X && this.X <= 2 &&
+                        0 <= this.Y && this.Y <= 2
+                    : true;
+        }
     }
 }

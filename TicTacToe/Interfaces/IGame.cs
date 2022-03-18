@@ -8,7 +8,7 @@ namespace TicTacToe.Interfaces
 {
     public enum GameState { None, OnGoing, Finneshed }
     public enum GameType { PvP, PvAI, AIvAI }
-    interface IGame
+    interface IGame : ICloneable
     {
         public GameState GameState { get; set; }
         public GameType GameType { get; set; }

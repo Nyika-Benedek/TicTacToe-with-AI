@@ -162,15 +162,21 @@ namespace TicTacToe
             }
         }
 
-        private void PlayerMove() {
-            DrawPlayerClick(game.CurrentPlayer);
-            game.Field.AddMove(GetMousePosition(), game.CurrentPlayer.symbol);
+        private bool PlayerMove() {
+            if (game.Field.AddMove(GetMousePosition(), game.CurrentPlayer.symbol))
+            {
+                DrawPlayerClick(game.CurrentPlayer);
+                game.NextPlayer();
+                return true;
+            }
+            return false;
         }
 
         private void AiMove(Ai ai) {
-            Coordinate move = ai.GetMoveByLogicType((Game)game);
-            game.Field.AddMove(move, ai.symbol);
-            DrawAiMove(move, ai.symbol);
+            /*Coordinate move = ai.GetMoveByLogicType((Game)game);
+            game.Field.AddMove(move, ai.symbol);*/
+            DrawAiMove(ai.Act((Game)game), ai.symbol);
+            game.NextPlayer();
         }
 
         public void PostWinCondition() {
@@ -200,26 +206,28 @@ namespace TicTacToe
                 {
                     PostWinCondition();
                 }
-                game.NextPlayer();
+                
                 return;
             }
 
             if (game.GameType == GameType.PvAI)
             {
-                PlayerMove();
-                if (game.isEnded())
+                if (PlayerMove())
                 {
-                    PostWinCondition();
-                }
-                else
-                {
-                    game.NextPlayer();
-                    AiMove(ai2);
                     if (game.isEnded())
                     {
                         PostWinCondition();
+                        return;
                     }
-                    game.NextPlayer();
+                    else
+                    {
+                        AiMove(ai2);
+                        if (game.isEnded())
+                        {
+                            PostWinCondition();
+                            return;
+                        }
+                    }
                 }
                 return;
             }
