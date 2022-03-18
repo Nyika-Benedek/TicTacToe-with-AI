@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -62,7 +63,7 @@ namespace TicTacToe
         /// <summary>
         /// How many AI vs AI games should compute at once
         /// </summary>
-        private int AiIteration = 0;
+        private int AiIteration = 10;
 
         private IGame game;
 
@@ -181,13 +182,16 @@ namespace TicTacToe
 
         public void PostWinCondition() {
             game.EndGame();
-            if (game.Field.FieldState == FieldState.NoSpaceLeft)
+            if (game.GameType != GameType.AIvAI)
             {
-                MessageBox.Show("Unfortunately, this is a tie.");
-            }
-            else
-            {
-                MessageBox.Show($"Congratulation {game.Winner.name}, you win!");
+                if (game.Field.FieldState == FieldState.NoSpaceLeft)
+                {
+                    MessageBox.Show("Unfortunately, this is a tie.");
+                }
+                else
+                {
+                    MessageBox.Show($"Congratulation {game.Winner.name}, you win!");
+                }
             }
             // TODO: DATABSE UPDATE
         }
@@ -239,19 +243,48 @@ namespace TicTacToe
 
         private void LetAiPlay()
         {
+            int ai1Win = 0;
+            int ai2Win = 0;
+            int tie = 0;
             for (int i = 0; i < AiIteration; i++)
             {
+                bool isAi1 = true;
                 while (!game.isEnded())
                 {
-                    // TODO: AI-1 act
+                    if (isAi1)
+                    {
+                        AiMove(ai1);
+                    }
+                    else
+                    {
+                        AiMove(ai2);
+                    }
+                    //Thread.Sleep(200);
+                    isAi1 = !isAi1;
                     if (game.isEnded())
                     {
                         break;
                     }
-                    // TODO: AI-2 act
                 }
                 PostWinCondition();
+                if (game.Winner == ai1)
+                {
+                    ai1Win++;
+                }
+                else if(game.Winner == ai2)
+                {
+                    ai2Win++;
+                }
+                else
+                {
+                    tie++;
+                }
+                game.Restart();
+                DrawNewField();
             }
+            MessageBox.Show($"{game.Players[0].name} has won {ai1Win}/{AiIteration}" + '\n' +
+                            $"{game.Players[1].name} has won {ai2Win}/{AiIteration}" + '\n' +
+                            $"Played ties: {tie}");
         }
 
         private void NewGame(object sender, RoutedEventArgs e)
@@ -296,18 +329,20 @@ namespace TicTacToe
                 var aiVsAiOptionsWindow = new AiVsAiOptionsWindow();
                 aiVsAiOptionsWindow.ShowDialog();
 
+                // ai1 setup
                 if (aiVsAiOptionsWindow.ai1LogicType == AiLogicType.Random)
                 {
-                    ai2 = new Ai("Player1(AI)", 'X', AiLogicType.Random, game);
-                    game.AddPlayer(ai2);
+                    ai1 = new Ai("Player1(AI)", 'X', AiLogicType.Random, game);
+                    game.AddPlayer(ai1);
                 }
 
                 if (aiVsAiOptionsWindow.ai1LogicType == AiLogicType.MinMax)
                 {
-                    ai2 = new Ai("Player1(AI)", 'X', AiLogicType.MinMax, game);
-                    game.AddPlayer(ai2);
+                    ai1 = new Ai("Player1(AI)", 'X', AiLogicType.MinMax, game);
+                    game.AddPlayer(ai1);
                 }
 
+                // ai2 setup
                 if (aiVsAiOptionsWindow.ai2LogicType == AiLogicType.Random)
                 {
                     ai2 = new Ai("Player2(AI)", 'O', AiLogicType.Random, game);
@@ -319,6 +354,7 @@ namespace TicTacToe
                     ai2 = new Ai("Player2(AI)", 'O', AiLogicType.MinMax, game);
                     game.AddPlayer(ai2);
                 }
+
             }
 
             game.GameType = newGameWindow.gameType;
