@@ -7,7 +7,7 @@ using TicTacToe.Interfaces;
 
 namespace TicTacToe.Models
 {
-    class Player : IPlayer
+    public class Player : IPlayer
     {
         public string name { get; private set; }
 

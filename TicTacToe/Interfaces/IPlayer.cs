@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.Interfaces
 {
-    interface IPlayer
+    public interface IPlayer
     {
         public String name { get; }
 

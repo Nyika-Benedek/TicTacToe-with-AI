@@ -193,7 +193,12 @@ namespace TicTacToe
                     MessageBox.Show($"Congratulation {game.Winner.name}, you win!");
                 }
             }
-            // TODO: DATABSE UPDATE
+            // Save results to the database.
+            DatabaseContextFactory databaseFactory = new DatabaseContextFactory();
+            using var databaseContext = databaseFactory.CreateDbContext(new string[0]);
+
+            DatabaseCommands database = new DatabaseCommands();
+            database.AddEntry((Game)game);
         }
 
         private void CanvasClick(object sender, MouseButtonEventArgs e)
@@ -370,7 +375,8 @@ namespace TicTacToe
 
         private void Query(object sender, RoutedEventArgs e)
         {
-
+            var queryWindow = new QueryWindow();
+            queryWindow.ShowDialog();
         }
 
     }

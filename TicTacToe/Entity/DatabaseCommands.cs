@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TicTacToe.Models;
 
 namespace TicTacToe.Entity
 {
@@ -10,9 +11,9 @@ namespace TicTacToe.Entity
     {
         DatabaseContextFactory databaseFactory = new DatabaseContextFactory();
 
-        public void AddEntry() {
+        public void AddEntry(Game game) {
             using var connection = databaseFactory.CreateDbContext(new string[0]); {
-                connection.database.Add(new DatabaseStructure());
+                connection.database.Add(new DatabaseStructure(game));
                 connection.SaveChanges();
             }
         }

@@ -8,7 +8,7 @@ using TicTacToe.Model;
 namespace TicTacToe.Interfaces
 {
     public enum FieldState { ThereIsEmptySpace, NoSpaceLeft, ThereIsAMatch }
-    interface IField : ICloneable
+    public interface IField : ICloneable
     {
         public FieldState FieldState { get; }
         public Char[,] FieldMap { get; }
