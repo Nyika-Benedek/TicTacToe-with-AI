@@ -240,7 +240,6 @@ namespace TicTacToe
                 }
                 return;
             }
-            // TODO: if GameType.AIvAI
             if (game.GameType == GameType.AIvAI) {
                 LetAiPlay();
             }
@@ -316,13 +315,13 @@ namespace TicTacToe
 
                 if (aiOptionsWindow.aiLogicType == AiLogicType.Random)
                 {
-                    ai2 = new Ai("Player2(AI)", 'O', AiLogicType.Random, game);
+                    ai2 = new Ai("Player2(AI) - Random", 'O', AiLogicType.Random, game);
                     game.AddPlayer(ai2);
                 }
 
                 if (aiOptionsWindow.aiLogicType == AiLogicType.MinMax)
                 {
-                    ai2 = new Ai("Player2(AI)", 'O', AiLogicType.MinMax, game);
+                    ai2 = new Ai("Player2(AI) - MiniMax", 'O', AiLogicType.MinMax, game);
                     game.AddPlayer(ai2);
                 }
 
@@ -337,26 +336,26 @@ namespace TicTacToe
                 // ai1 setup
                 if (aiVsAiOptionsWindow.ai1LogicType == AiLogicType.Random)
                 {
-                    ai1 = new Ai("Player1(AI)", 'X', AiLogicType.Random, game);
+                    ai1 = new Ai("Player1(AI) - Random", 'X', AiLogicType.Random, game);
                     game.AddPlayer(ai1);
                 }
 
                 if (aiVsAiOptionsWindow.ai1LogicType == AiLogicType.MinMax)
                 {
-                    ai1 = new Ai("Player1(AI)", 'X', AiLogicType.MinMax, game);
+                    ai1 = new Ai("Player1(AI) - MiniMax", 'X', AiLogicType.MinMax, game);
                     game.AddPlayer(ai1);
                 }
 
                 // ai2 setup
                 if (aiVsAiOptionsWindow.ai2LogicType == AiLogicType.Random)
                 {
-                    ai2 = new Ai("Player2(AI)", 'O', AiLogicType.Random, game);
+                    ai2 = new Ai("Player2(AI) - Random", 'O', AiLogicType.Random, game);
                     game.AddPlayer(ai2);
                 }
 
                 if (aiVsAiOptionsWindow.ai2LogicType == AiLogicType.MinMax)
                 {
-                    ai2 = new Ai("Player2(AI)", 'O', AiLogicType.MinMax, game);
+                    ai2 = new Ai("Player2(AI) - Minimax", 'O', AiLogicType.MinMax, game);
                     game.AddPlayer(ai2);
                 }
 

@@ -5,15 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TicTacToe"
         mc:Ignorable="d"
-        Title="QueryWindow" Height="450" Width="800">
+        Title="QueryWindow" Height="450" Width="800" MinWidth="900">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBox x:Name="FilterText" Width="100" Grid.Row="0" Text="Filter by name" HorizontalAlignment="Left" GotFocus="ClearFilterText" LostFocus="FillFilterText"/>
-        <Button x:Name="Filter" Content="Filter" Margin="105,0,629,0" Click="FilterByName"/>
-        <Button x:Name="DropDatabase" Content="Drop Database" Width="100" HorizontalAlignment="Right" Background="Red" Foreground="White" Click="DropDb"/>
+        <Button x:Name="Filter" Content="Filter" Grid.Row="0" Margin="105,0,629,0" HorizontalAlignment="Left" Click="FilterByName" Width="50"/>
+        <Button x:Name="ClearFilter" Content="Clear" Grid.Row="0" Margin="160,0,0,0" HorizontalAlignment="Left" Click="ResetQuery" Width="50"/>
+        <Button x:Name="DropDatabase" Content="Drop Database" Grid.Row="0" Width="100" HorizontalAlignment="Right" Background="Red" Foreground="White" Click="DropDb"/>
         <DataGrid Name="QueryGrid" Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" IsReadOnly="True" Binding="{Binding id}" Width="30"/>
@@ -24,6 +25,6 @@
                 <DataGridTextColumn Header="Player2" IsReadOnly="True" Binding="{Binding player2}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="ClearFilter" Content="Clear" Margin="156,0,578,0" Click="ResetQuery"/>
+
     </Grid>
 </Window>

@@ -13,12 +13,21 @@ namespace TicTacToe.AI
     /// </summary>
     class AIUtils
     {
+        /// <summary>
+        /// Generate a random Coordinate.
+        /// </summary>
+        /// <returns>A random <see cref="Coordinate"/></returns>
         public static Coordinate GetRandomCoordinate() {
             Random random = new Random();
 
             return new Coordinate(random.Next(0, 3), random.Next(0, 3));
         }
 
+        /// <summary>
+        /// Give a list of possible move(only direct moves), it will chose the worst(like it was the enemy)
+        /// </summary>
+        /// <param name="childs"><see cref="List{(Coordinate, int)}"/></param>
+        /// <returns>Worst move <see cref="List{(Coordinate, int)}"/></returns>
         public static (Coordinate, int) GetMinOfChilds(List<(Coordinate, int)> childs) {
             if (childs.Count == 0)
             {
@@ -41,6 +50,11 @@ namespace TicTacToe.AI
             return childs[min];
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="childs"></param>
+        /// <returns></returns>
         public static (Coordinate, int) GetMaxOfChilds(List<(Coordinate, int)> childs)
         {
             if (childs.Count == 0)

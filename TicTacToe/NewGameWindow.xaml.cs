@@ -74,7 +74,6 @@ namespace TicTacToe
                 gameType = GameType.AIvAI;
             }
 
-            // TODO: fix Parse
             try
             {
                 XGames = int.Parse(AutoRunXGames.Text);

@@ -67,13 +67,20 @@ namespace TicTacToe
 
         private void DropDb(object sender, RoutedEventArgs e)
         {
-            using var databaseContext = databaseFactory.CreateDbContext(new string[0]);
-            DatabaseCommands database = new DatabaseCommands();
-            foreach (var entry in database.GetAll())
+            if (MessageBox.Show("Are you sure, you want to delete all entry?", "Delete Database", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
             {
-                database.DeleteById(entry.id);
+                return;
             }
-            RefreshDatagrid();
+            else
+            {
+                using var databaseContext = databaseFactory.CreateDbContext(new string[0]);
+                DatabaseCommands database = new DatabaseCommands();
+                foreach (var entry in database.GetAll())
+                {
+                    database.DeleteById(entry.id);
+                }
+                RefreshDatagrid();
+            }
         }
 
         private void ClearFilterText(object sender, RoutedEventArgs e)
