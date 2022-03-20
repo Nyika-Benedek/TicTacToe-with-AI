@@ -7,6 +7,9 @@ using TicTacToe.Interfaces;
 
 namespace TicTacToe.Models
 {
+    /// <summary>
+    /// This class represents the Players as an object.
+    /// </summary>
     public class Player : IPlayer
     {
         public string name { get; private set; }

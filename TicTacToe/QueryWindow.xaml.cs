@@ -20,7 +20,7 @@ namespace TicTacToe
     /// </summary>
     public partial class QueryWindow : Window
     {
-        DatabaseContextFactory databaseFactory = new DatabaseContextFactory();
+        DatabaseCommands database = new DatabaseCommands();
 
         public QueryWindow()
         {
@@ -33,8 +33,7 @@ namespace TicTacToe
         public void RefreshDatagrid() 
         {
             QueryGrid.Items.Clear();
-            using var databaseContext = databaseFactory.CreateDbContext(new string[0]);
-            DatabaseCommands database = new DatabaseCommands();
+            
 
 
             /*
@@ -54,8 +53,6 @@ namespace TicTacToe
         {
             QueryGrid.Items.Clear();
 
-            using var databaseContext = databaseFactory.CreateDbContext(new string[0]);
-            DatabaseCommands database = new DatabaseCommands();
             foreach (var entry in database.GetAll())
             {
                 if (entry.player1.Contains(FilterText.Text) || entry.player2.Contains(FilterText.Text))
@@ -73,8 +70,6 @@ namespace TicTacToe
             }
             else
             {
-                using var databaseContext = databaseFactory.CreateDbContext(new string[0]);
-                DatabaseCommands database = new DatabaseCommands();
                 foreach (var entry in database.GetAll())
                 {
                     database.DeleteById(entry.id);

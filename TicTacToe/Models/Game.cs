@@ -7,6 +7,9 @@ using TicTacToe.Interfaces;
 
 namespace TicTacToe.Models
 {
+    /// <summary>
+    /// Thi class represents the game as an object.
+    /// </summary>
     public class Game : IGame
     {
         public List<IPlayer> Players { get; private set; } = new List<IPlayer>(2);
@@ -84,6 +87,10 @@ namespace TicTacToe.Models
             Winner = null;
         }
 
+        /// <summary>
+        /// Make a deepcopy of itself.
+        /// </summary>
+        /// <returns>Deep copy of this object</returns>
         public object Clone()
         {
             Game clone = new Game();

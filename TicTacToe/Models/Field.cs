@@ -8,6 +8,9 @@ using TicTacToe.Model;
 
 namespace TicTacToe.Models
 {
+    /// <summary>
+    /// This class represents the field of the game.
+    /// </summary>
     public class Field : IField
     {
         public FieldState FieldState { get; private set; } = FieldState.ThereIsEmptySpace;
@@ -111,6 +114,10 @@ namespace TicTacToe.Models
             return this.FieldMap[coordinate.X, coordinate.Y] == '\0';
         }
 
+        /// <summary>
+        /// Makes a deep copy of itself.
+        /// </summary>
+        /// <returns>a deep copy</returns>
         public object Clone()
         {
             Field clone = new Field();

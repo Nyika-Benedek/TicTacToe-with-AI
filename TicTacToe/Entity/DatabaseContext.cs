@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.Entity
 {
+    /// <summary>
+    /// This class alows the Entity to make queries and save data.
+    /// </summary>
     public class DatabaseContext : DbContext
     {
         public DbSet<DatabaseStructure> database { get; set; }
@@ -24,6 +27,9 @@ namespace TicTacToe.Entity
         }
     }
 
+    /// <summary>
+    /// This factory class helps to create <see cref="DbContext"/> instances.
+    /// </summary>
     public class DatabaseContextFactory : IDesignTimeDbContextFactory<DatabaseContext>
     {
         public DatabaseContext CreateDbContext(string[] args)

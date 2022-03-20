@@ -7,6 +7,9 @@ using TicTacToe.Models;
 
 namespace TicTacToe.Entity
 {
+    /// <summary>
+    /// The structure of the database.
+    /// </summary>
     public class DatabaseStructure
     {
         public int id { get; set; }
@@ -16,11 +19,18 @@ namespace TicTacToe.Entity
         public int turn { get; set; }
         public DateTime date { get; set; }
 
+        /// <summary>
+        /// Default constructor of an entry line.
+        /// </summary>
         public DatabaseStructure()
         {
             this.date = DateTime.Now;
         }
 
+        /// <summary>
+        /// Constructor which creates an entry from a game's result.
+        /// </summary>
+        /// <param name="game">The ended game objectum</param>
         public DatabaseStructure(Game game)
         {
             this.player1 = game.Players[0].name;

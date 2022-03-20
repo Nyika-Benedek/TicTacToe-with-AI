@@ -51,10 +51,10 @@ namespace TicTacToe.AI
         }
 
         /// <summary>
-        /// 
+        /// Give a list of possible move(only direct moves), it will chose the best(for itself)
         /// </summary>
-        /// <param name="childs"></param>
-        /// <returns></returns>
+        /// <param name="childs"><see cref="List{(Coordinate, int)}"/></param>
+        /// <returns><see cref="List{(Coordinate, int)}"/></returns>
         public static (Coordinate, int) GetMaxOfChilds(List<(Coordinate, int)> childs)
         {
             if (childs.Count == 0)

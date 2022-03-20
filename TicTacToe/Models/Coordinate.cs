@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.Model
 {
+    /// <summary>
+    /// This class represents the coordinat structure of the games field.
+    /// </summary>
     public class Coordinate
     {
 

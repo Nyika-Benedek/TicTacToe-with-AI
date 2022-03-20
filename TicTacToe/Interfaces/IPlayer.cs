@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.Interfaces
 {
+    /// <summary>
+    /// This interface contain all nescesarry atributes of <see cref="Player"/>
+    /// </summary>
     public interface IPlayer
     {
         public String name { get; }
