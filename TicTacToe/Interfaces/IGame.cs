@@ -30,6 +30,6 @@ namespace TicTacToe.Interfaces
 
         public abstract IPlayer NextPlayer();
         public abstract void EndGame();
-
+        void Restart();
     }
 }

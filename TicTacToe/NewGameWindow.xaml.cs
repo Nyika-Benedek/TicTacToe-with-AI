@@ -74,9 +74,15 @@ namespace TicTacToe
                 gameType = GameType.AIvAI;
             }
 
-            if (intRegex.IsMatch(AutoRunXGames.Text))
+            // TODO: fix Parse
+            try
             {
                 XGames = int.Parse(AutoRunXGames.Text);
+            }
+            catch (FormatException)
+            {
+
+                XGames = 10;
             }
             Close();
         }

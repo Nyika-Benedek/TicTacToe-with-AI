@@ -7,7 +7,7 @@ using TicTacToe.Interfaces;
 
 namespace TicTacToe.Models
 {
-    class Game : IGame
+    public class Game : IGame
     {
         public List<IPlayer> Players { get; private set; } = new List<IPlayer>(2);
 
@@ -51,7 +51,14 @@ namespace TicTacToe.Models
             Turn -= 2;
 
             this.GameState = GameState.Finneshed;
-            Winner = this.CurrentPlayer;
+            if (this.Field.FieldState == FieldState.ThereIsAMatch)
+            {
+                Winner = this.CurrentPlayer;
+            }
+            else
+            {
+                Winner = null;
+            }
         }
 
         public IPlayer NextPlayer()
@@ -70,6 +77,7 @@ namespace TicTacToe.Models
 
         public void Restart()
         {
+            this.Turn = 0;
             GameState = GameState.OnGoing;
             this.CurrentPlayer = Players[0];
             Field = new Field();
