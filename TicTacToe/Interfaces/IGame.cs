@@ -12,7 +12,7 @@ namespace TicTacToe.Interfaces
     public enum GameState { None, OnGoing, Finneshed }
 
     /// <summary>
-    /// This class represents the type of the game.
+    /// This class represents the type of the game: { Player vs Player, Player vs AI, AI vs AI}.
     /// </summary>
     public enum GameType { PvP, PvAI, AIvAI }
 

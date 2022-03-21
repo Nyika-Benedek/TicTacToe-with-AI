@@ -28,9 +28,18 @@ namespace TicTacToe
 
         public string Player1Name { get; private set; }
         public string Player2Name { get; private set; }
+
+        /// <summary>
+        /// How many games should the 2 ai play continuously.
+        /// </summary>
         public int XGames { get; private set; }
         public GameType gameType { get; private set; }
 
+        /// <summary>
+        /// Gather all data from this window before closing it.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void GiveNames(object sender, RoutedEventArgs e)
         {
             var nameRegex = new Regex(@"[^a-zA-Z0-9\s]");
@@ -86,6 +95,11 @@ namespace TicTacToe
             Close();
         }
 
+        /// <summary>
+        /// Enable or disable the window's other elements to access the only necessary functions.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void PlayerVsPlayer(object sender, RoutedEventArgs e)
         {
             Player1.IsEnabled = true;
@@ -95,6 +109,11 @@ namespace TicTacToe
             AIvsAIButton.IsChecked = false;
         }
 
+        /// <summary>
+        /// Enable or disable the window's other elements to access the only necessary functions.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void PlayerVsAI(object sender, RoutedEventArgs e)
         {
             Player1.IsEnabled = true;
@@ -105,6 +124,11 @@ namespace TicTacToe
             PvsPButton.IsChecked = false;
         }
 
+        /// <summary>
+        /// Enable or disable the window's other elements to access the only necessary functions.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void AIVsAI(object sender, RoutedEventArgs e)
         {
             Player1.IsEnabled = false;

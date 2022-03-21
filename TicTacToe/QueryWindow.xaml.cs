@@ -20,6 +20,9 @@ namespace TicTacToe
     /// </summary>
     public partial class QueryWindow : Window
     {
+        /// <summary>
+        /// Create a connection with the database.
+        /// </summary>
         DatabaseCommands database = new DatabaseCommands();
 
         public QueryWindow()
@@ -30,6 +33,9 @@ namespace TicTacToe
             RefreshDatagrid();
         }
 
+        /// <summary>
+        /// Refill the datagrid with all entry from the database.
+        /// </summary>
         public void RefreshDatagrid() 
         {
             QueryGrid.Items.Clear();
@@ -49,6 +55,11 @@ namespace TicTacToe
             }
         }
 
+        /// <summary>
+        /// Refill the datagrid from the datagrid filter by name
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void FilterByName(object sender, RoutedEventArgs e)
         {
             QueryGrid.Items.Clear();
@@ -62,6 +73,11 @@ namespace TicTacToe
             }
         }
 
+        /// <summary>
+        /// Delete all the stored data from the databse.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void DropDb(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure, you want to delete all entry?", "Delete Database", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
@@ -78,6 +94,11 @@ namespace TicTacToe
             }
         }
 
+        /// <summary>
+        /// Clear placeholder on focus.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void ClearFilterText(object sender, RoutedEventArgs e)
         {
             if (FilterText.Text == "Filter by name")
@@ -86,6 +107,11 @@ namespace TicTacToe
             }
         }
 
+        /// <summary>
+        /// Rewrite placeholder if it was empty on focus lose.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void FillFilterText(object sender, RoutedEventArgs e)
         {
             if (FilterText.Text == "")
@@ -94,6 +120,12 @@ namespace TicTacToe
             }
         }
 
+        /// <summary>
+        /// This function called, when the filter has been deleted.
+        /// Refreshing the datagrid content withoit the filters.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void ResetQuery(object sender, RoutedEventArgs e)
         {
             RefreshDatagrid();

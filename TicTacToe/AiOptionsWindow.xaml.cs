@@ -25,8 +25,16 @@ namespace TicTacToe
             InitializeComponent();
         }
 
+        /// <summary>
+        /// How the AI should think.
+        /// </summary>
         public AiLogicType aiLogicType { get; private set; }
 
+        /// <summary>
+        /// Gather all input information into an accessible form.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (random.IsChecked == true)

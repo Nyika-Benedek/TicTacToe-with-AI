@@ -61,17 +61,32 @@ namespace TicTacToe
         }
 
         /// <summary>
-        /// How many AI vs AI games should compute at once
+        /// How many AI vs AI games should compute at once.
         /// </summary>
         private int AiIteration = 10;
 
         private IGame game;
 
-        private const int CelldSize = 100;
+        /// <summary>
+        /// A cell's size in pixels.
+        /// </summary>
+        private const int CellSize = 100;
+
+        /// <summary>
+        /// Which type of line should be drawn on the canvas.
+        /// </summary>
         public enum LineType { GridLine, XLine }
         private Ai ai1;
         private Ai ai2;
 
+        /// <summary>
+        /// Draw a single line on the canvas from the starting coordinate to the ending coordinate with a given color type.
+        /// </summary>
+        /// <param name="x1">Starting X coordinate.</param>
+        /// <param name="x2">Ending X coordinate.</param>
+        /// <param name="y1">Starting Y coordinate.</param>
+        /// <param name="y2">Ending Y coordinate.</param>
+        /// <param name="color"><see cref="LineType"/> of the drawn object.</param>
         private void DrawLine(int x1, int x2, int y1, int y2, LineType color) {
             var myLine = new Line();
             if (color == LineType.GridLine)
@@ -93,17 +108,25 @@ namespace TicTacToe
             canvas.Children.Add(myLine);
         }
 
+        /// <summary>
+        /// Draw X into the given coordinate.
+        /// </summary>
+        /// <param name="coordinate">Where to draw the X sign.</param>
         private void DrawX(Coordinate coordinate)
         {
             int x = coordinate.X;
             int y = coordinate.Y;
             //cell's right left corner
-            x = x * 100;
-            y = y * 100;
-            DrawLine(x, x + CelldSize, y, y + CelldSize, LineType.XLine);
-            DrawLine(x, x + CelldSize, y + CelldSize, y, LineType.XLine);
+            x = x * CellSize;
+            y = y * CellSize;
+            DrawLine(x, x + CellSize, y, y + CellSize, LineType.XLine);
+            DrawLine(x, x + CellSize, y + CellSize, y, LineType.XLine);
         }
 
+        /// <summary>
+        /// Draw a circle into the given coordinate.
+        /// </summary>
+        /// <param name="coordinate">Where to draw the circle.</param>
         private void DrawCirle(Coordinate coordinate)
         {
             Ellipse myEllipse = new Ellipse();
@@ -114,16 +137,19 @@ namespace TicTacToe
             myEllipse.Stroke = Brushes.White;
 
             // Set the width and height of the Ellipse.
-            myEllipse.Width = CelldSize;
-            myEllipse.Height = CelldSize;
+            myEllipse.Width = CellSize;
+            myEllipse.Height = CellSize;
 
-            Canvas.SetLeft(myEllipse, coordinate.X * CelldSize);
-            Canvas.SetTop(myEllipse, coordinate.Y * CelldSize);
+            Canvas.SetLeft(myEllipse, coordinate.X * CellSize);
+            Canvas.SetTop(myEllipse, coordinate.Y * CellSize);
 
             // Add the Ellipse to the StackPanel.
             canvas.Children.Add(myEllipse);
         }
 
+        /// <summary>
+        /// Draw a new field grid.
+        /// </summary>
         private void DrawNewField() {
             canvas.Children.Clear();
             // Vertical Lines
@@ -135,12 +161,20 @@ namespace TicTacToe
             DrawLine(0, 300, 200, 200, LineType.GridLine);
         }
 
+        /// <summary>
+        /// Gets the coordinate, which cell the mouse in.
+        /// </summary>
+        /// <returns><see cref="Coordinate"/> of which cell is the mouse in.</returns>
         private Coordinate GetMousePosition() {
-            int x = (int)(Mouse.GetPosition(canvas).X / CelldSize);
-            int y = (int)(Mouse.GetPosition(canvas).Y / CelldSize);
+            int x = (int)(Mouse.GetPosition(canvas).X / CellSize);
+            int y = (int)(Mouse.GetPosition(canvas).Y / CellSize);
             return new Coordinate(x, y);
         }
 
+        /// <summary>
+        /// Draw the actual player's symbol into the mouse position.
+        /// </summary>
+        /// <param name="player"></param>
         private void DrawPlayerClick(IPlayer player) {
             if (player.symbol == 'X')
             {
@@ -152,6 +186,11 @@ namespace TicTacToe
             }
         }
 
+        /// <summary>
+        /// Draw the AI choosed move.
+        /// </summary>
+        /// <param name="coordinate">Where to draw the AI's symbol.</param>
+        /// <param name="symbol">Which symbol the AI is with.</param>
         private void DrawAiMove(Coordinate coordinate, Char symbol) {
             if (symbol == 'X')
             {
@@ -163,6 +202,10 @@ namespace TicTacToe
             }
         }
 
+        /// <summary>
+        /// Calls every method, to execute the player's move.
+        /// </summary>
+        /// <returns>True, if it was a valid move, False if it wasn't(no changes aplied on the game either)</returns>
         private bool PlayerMove() {
             if (game.Field.AddMove(GetMousePosition(), game.CurrentPlayer.symbol))
             {
@@ -173,6 +216,10 @@ namespace TicTacToe
             return false;
         }
 
+        /// <summary>
+        /// Calls every method to execute the AI's move.
+        /// </summary>
+        /// <param name="ai">The AI we use as a player</param>
         private void AiMove(Ai ai) {
             /*Coordinate move = ai.GetMoveByLogicType((Game)game);
             game.Field.AddMove(move, ai.symbol);*/
@@ -180,6 +227,9 @@ namespace TicTacToe
             game.NextPlayer();
         }
 
+        /// <summary>
+        /// Execute every necessary action, after the game is at end state.
+        /// </summary>
         public void PostWinCondition() {
             game.EndGame();
             if (game.GameType != GameType.AIvAI)
@@ -201,6 +251,12 @@ namespace TicTacToe
             database.AddEntry((Game)game);
         }
 
+        /// <summary>
+        /// This method is called, when the user clicked the canvas.
+        /// Calls every method to make the correct actions based on the <see cref="GameType"/>.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CanvasClick(object sender, MouseButtonEventArgs e)
         {
             if (game is null || game.GameState == GameState.None || game.GameState == GameState.Finneshed)
@@ -245,6 +301,9 @@ namespace TicTacToe
             }
         }
 
+        /// <summary>
+        /// Makes 2 AI playe with eachother <see cref="AiIteration"/> times.
+        /// </summary>
         private void LetAiPlay()
         {
             int ai1Win = 0;
@@ -291,6 +350,11 @@ namespace TicTacToe
                             $"Played ties: {tie}");
         }
 
+        /// <summary>
+        /// Initialize everything to start a new <see cref="Game"/>.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void NewGame(object sender, RoutedEventArgs e)
         {
             var newGameWindow = new NewGameWindow();
@@ -372,6 +436,11 @@ namespace TicTacToe
             }
         }
 
+        /// <summary>
+        /// Opens a query window where we can access the stored information from the previously played game.
+        /// </summary>
+        /// <param name="sender">The interacted object.</param>
+        /// <param name="e">Data of the mouse related event.</param>
         private void Query(object sender, RoutedEventArgs e)
         {
             var queryWindow = new QueryWindow();

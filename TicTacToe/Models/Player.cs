@@ -16,6 +16,11 @@ namespace TicTacToe.Models
 
         public Char symbol { get; private set; }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="name">Name of the player</param>
+        /// <param name="symbol">Symbol charater of the player</param>
         public Player(String name, Char symbol)
         {
             this.name = name;
