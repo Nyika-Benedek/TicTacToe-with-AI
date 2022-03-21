@@ -335,7 +335,7 @@ namespace TicTacToe
                     }
                 }
                 game.EndGame();
-                games.Add((Game)game);
+                games.Add((Game)game.Clone());
                 if (game.Winner == ai1)
                 {
                     ai1Win++;
