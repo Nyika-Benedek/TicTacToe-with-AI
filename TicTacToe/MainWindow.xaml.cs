@@ -243,12 +243,16 @@ namespace TicTacToe
                     MessageBox.Show($"Congratulation {game.Winner.name}, you win!");
                 }
             }
-            // Save results to the database.
-            DatabaseContextFactory databaseFactory = new DatabaseContextFactory();
-            using var databaseContext = databaseFactory.CreateDbContext(new string[0]);
-
-            DatabaseCommands database = new DatabaseCommands();
-            database.AddEntry((Game)game);
+            try
+            {
+                DatabaseCommands database = new DatabaseCommands();
+                database.AddEntry((Game)game);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is no Database in this device!");
+            }
+            
         }
 
         /// <summary>
@@ -309,6 +313,7 @@ namespace TicTacToe
             int ai1Win = 0;
             int ai2Win = 0;
             int tie = 0;
+            List<Game> games = new List<Game>();
             for (int i = 0; i < AiIteration; i++)
             {
                 bool isAi1 = true;
@@ -329,7 +334,8 @@ namespace TicTacToe
                         break;
                     }
                 }
-                PostWinCondition();
+                game.EndGame();
+                games.Add((Game)game);
                 if (game.Winner == ai1)
                 {
                     ai1Win++;
@@ -348,6 +354,27 @@ namespace TicTacToe
             MessageBox.Show($"{game.Players[0].name} has won {ai1Win}/{AiIteration}" + '\n' +
                             $"{game.Players[1].name} has won {ai2Win}/{AiIteration}" + '\n' +
                             $"Played ties: {tie}");
+            PostGames(games);
+        }
+
+        /// <summary>
+        /// Post a <see cref="List{Game}"/> into the database at once.
+        /// </summary>
+        /// <param name="games">List of <see cref="Game"/>s</param>
+        private void PostGames(List<Game> games)
+        {
+            try
+            {
+                DatabaseCommands database = new DatabaseCommands();
+                foreach (var game in games)
+                {
+                    database.AddEntry(game);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is no Database!");
+            }
         }
 
         /// <summary>

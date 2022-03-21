@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using TicTacToe.Models;
 
 namespace TicTacToe.Entity
@@ -19,10 +20,18 @@ namespace TicTacToe.Entity
         /// </summary>
         /// <param name="game"></param>
         public void AddEntry(Game game) {
-            using var connection = databaseFactory.CreateDbContext(new string[0]); {
-                connection.database.Add(new DatabaseStructure(game));
-                connection.SaveChanges();
-            }
+            //try
+            //{
+                using var connection = databaseFactory.CreateDbContext(new string[0]);
+                {
+                    connection.database.Add(new DatabaseStructure(game));
+                    connection.SaveChanges();
+                }
+            //}
+            //catch (Exception)
+            //{
+                //MessageBox.Show("There is no available database in this device!");
+            //}
         }
 
         /// <summary>
@@ -30,10 +39,18 @@ namespace TicTacToe.Entity
         /// </summary>
         /// <returns>every entries in <see cref="List{DatabaseStructure}"/></returns>
         public List<DatabaseStructure> GetAll() {
-            using var connection = databaseFactory.CreateDbContext(new string[0]);
+            try
             {
-                return connection.database.ToList();
+                using var connection = databaseFactory.CreateDbContext(new string[0]);
+                {
+                    return connection.database.ToList();
+                }
             }
+            catch (Exception)
+            {
+                MessageBox.Show("There is no available database in this device!");
+            }
+            return new List<DatabaseStructure>(0);
         }
 
         /// <summary>
@@ -41,14 +58,21 @@ namespace TicTacToe.Entity
         /// </summary>
         /// <param name="id">The ID of the requested entry</param>
         public void DeleteById(int id) {
-            using var connection = databaseFactory.CreateDbContext(new string[0]);
+            try
             {
-                var entry = connection.database.Find(id);
-                if (!(entry is null))
+                using var connection = databaseFactory.CreateDbContext(new string[0]);
                 {
-                    connection.Remove(connection.database.Find(id));
-                    connection.SaveChanges();
+                    var entry = connection.database.Find(id);
+                    if (!(entry is null))
+                    {
+                        connection.Remove(connection.database.Find(id));
+                        connection.SaveChanges();
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is no available database in this device!");
             }
         }
 
@@ -57,13 +81,20 @@ namespace TicTacToe.Entity
         /// </summary>
         /// <param name="id">The ID of the requested entry</param>
         public void UpdateById(int id) {
-            using var connection = databaseFactory.CreateDbContext(new string[0]);
+            try
             {
-                var entry = connection.database.Find(id);
-                entry.date = DateTime.Now;
+                using var connection = databaseFactory.CreateDbContext(new string[0]);
+                {
+                    var entry = connection.database.Find(id);
+                    entry.date = DateTime.Now;
 
-                connection.Update(entry);
-                connection.SaveChanges();
+                    connection.Update(entry);
+                    connection.SaveChanges();
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("There is no available database in this device!");
             }
         }
     }
