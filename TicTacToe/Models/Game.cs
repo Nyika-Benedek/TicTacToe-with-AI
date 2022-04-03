@@ -82,6 +82,7 @@ namespace TicTacToe.Models
         {
             this.Turn = 0;
             GameState = GameState.OnGoing;
+            playerIndex = 0;
             this.CurrentPlayer = Players[0];
             Field = new Field();
             Winner = null;

@@ -327,7 +327,7 @@ namespace TicTacToe
                     {
                         AiMove(ai2);
                     }
-                    //Thread.Sleep(200);
+
                     isAi1 = !isAi1;
                     if (game.isEnded())
                     {
@@ -353,7 +353,8 @@ namespace TicTacToe
             }
             MessageBox.Show($"{game.Players[0].name} has won {ai1Win}/{AiIteration}" + '\n' +
                             $"{game.Players[1].name} has won {ai2Win}/{AiIteration}" + '\n' +
-                            $"Played ties: {tie}");
+                            $"Played ties: {tie}",
+                            "Summary of simulated matches");
             PostGames(games);
         }
 
