@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -58,6 +59,22 @@ namespace TicTacToe
             */
 
             DrawNewField();
+
+
+            DatabaseContextFactory databaseFactory = new DatabaseContextFactory();
+
+            using var connection = databaseFactory.CreateDbContext(new string[0]);
+            {
+
+                if (connection.Database.EnsureCreated())
+                {
+                    connection.Database.EnsureDeleted();
+                    connection.Database.Migrate();
+                    MessageBox.Show("No database was found in this device!" + '\n' + "Creating database...", "Database wizard");
+                }
+                   
+
+            }
         }
 
         /// <summary>
